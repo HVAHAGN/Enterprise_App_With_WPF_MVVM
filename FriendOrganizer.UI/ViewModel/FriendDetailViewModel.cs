@@ -28,9 +28,11 @@ namespace FriendOrganizer.UI.ViewModel
             SaveCommand = new DelegateCommand(OnSaveExecute, OnSaveCanExecute);
         }
 
-        public async Task LoadAsync(int friendId)
+        public async Task LoadAsync(int? friendId)
         {
-            var friend = await _friendRepository.GetByIdAsync(friendId);
+            var friend = friendId.HasValue?
+                await _friendRepository.GetByIdAsync(friendId.Value)
+                : CreateNewFriend();
 
             Friend = new FriendWrapper(friend);
             Friend.PropertyChanged += (s, e) =>
@@ -45,7 +47,13 @@ namespace FriendOrganizer.UI.ViewModel
                   }
               };
             ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
+            if (Friend.Id==0)
+            {
+                //Little trick to trigger the validation
+                Friend.FirstName = "";
+            }
         }
+
 
         public FriendWrapper Friend
         {
@@ -79,7 +87,6 @@ namespace FriendOrganizer.UI.ViewModel
             {
                 if (_hasChanges != value)
                 {
-
                     _hasChanges = value;
                     OnPropertyChanged();
                     ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
@@ -88,6 +95,12 @@ namespace FriendOrganizer.UI.ViewModel
         }
 
 
+        private Friend CreateNewFriend()
+        {
+            var friend = new Friend();
+            _friendRepository.Add(friend);
+            return friend;
+        }
         private bool OnSaveCanExecute()
         {
             // TODO: Check in addition if friend has changes
