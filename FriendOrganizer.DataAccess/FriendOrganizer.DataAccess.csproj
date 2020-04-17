@@ -56,6 +56,10 @@
     <Compile Include="Migrations\202004121616334_aaa.Designer.cs">
       <DependentUpon>202004121616334_aaa.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202004172004328_addProgrammingLanguagesTable.cs" />
+    <Compile Include="Migrations\202004172004328_addProgrammingLanguagesTable.Designer.cs">
+      <DependentUpon>202004172004328_addProgrammingLanguagesTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -75,6 +79,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202004121616334_aaa.resx">
       <DependentUpon>202004121616334_aaa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202004172004328_addProgrammingLanguagesTable.resx">
+      <DependentUpon>202004172004328_addProgrammingLanguagesTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
