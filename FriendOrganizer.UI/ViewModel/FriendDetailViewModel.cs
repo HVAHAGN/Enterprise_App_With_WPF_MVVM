@@ -9,6 +9,9 @@ using Prism.Commands;
 using FriendOrganizer.UI.Wrapper;
 using FriendOrganizer.UI.Data.Repositories;
 using FriendOrganizer.UI.View.Services;
+using FriendOrganizer.UI.Data.Lookups;
+using FriendOrganizer.DataAccess.Migrations;
+using System.Collections.ObjectModel;
 
 namespace FriendOrganizer.UI.ViewModel
 {
@@ -17,19 +20,23 @@ namespace FriendOrganizer.UI.ViewModel
         private IFriendRepository _friendRepository;
         private IEventAggregator _eventAggregator;
         private IMessageDialogService _messageDialogService;
+        private IProgrammingLanguageLookupDataService _programmingLanguageLookupDataService;
         private FriendWrapper _friend;
         private bool _hasChanges;
 
         public FriendDetailViewModel(IFriendRepository friendRepository,
-          IEventAggregator eventAggregator, IMessageDialogService messageDialogService)
+          IEventAggregator eventAggregator, IMessageDialogService messageDialogService,
+          IProgrammingLanguageLookupDataService programmingLanguageLookupDataService)
         {
             _friendRepository = friendRepository;
             _eventAggregator = eventAggregator;
             _messageDialogService = messageDialogService;
+            _programmingLanguageLookupDataService = programmingLanguageLookupDataService;
 
 
             SaveCommand = new DelegateCommand(OnSaveExecute, OnSaveCanExecute);
             DeleteCommand = new DelegateCommand(OnDeleteExecute);
+            ProgrammingLanguages = new ObservableCollection<LookupItem>();
         }
 
 
@@ -39,18 +46,25 @@ namespace FriendOrganizer.UI.ViewModel
                 await _friendRepository.GetByIdAsync(friendId.Value)
                 : CreateNewFriend();
 
+            InitializeFriend(friend);
+          
+            await LoadProgrammingLanguagesLookupAsync();
+        }
+
+        private void InitializeFriend(Friend friend)
+        {
             Friend = new FriendWrapper(friend);
             Friend.PropertyChanged += (s, e) =>
-              {
-                  if (!HasChanges)
-                  {
-                      HasChanges = _friendRepository.HasChanges();
-                  }
-                  if (e.PropertyName == nameof(Friend.HasErrors))
-                  {
-                      ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
-                  }
-              };
+            {
+                if (!HasChanges)
+                {
+                    HasChanges = _friendRepository.HasChanges();
+                }
+                if (e.PropertyName == nameof(Friend.HasErrors))
+                {
+                    ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
+                }
+            };
             ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
             if (Friend.Id == 0)
             {
@@ -59,6 +73,16 @@ namespace FriendOrganizer.UI.ViewModel
             }
         }
 
+        private async Task LoadProgrammingLanguagesLookupAsync()
+        {
+            ProgrammingLanguages.Clear();
+            ProgrammingLanguages.Add(new NullLookupItem() { DisplayMember=" - "});
+            var lookups = await _programmingLanguageLookupDataService.GetProgrammingLanguageLookupAsync();
+            foreach (var lookupItem in lookups)
+            {
+                ProgrammingLanguages.Add(lookupItem);
+            }
+        }
 
         public FriendWrapper Friend
         {
@@ -72,6 +96,7 @@ namespace FriendOrganizer.UI.ViewModel
 
         public ICommand SaveCommand { get; }
         public ICommand DeleteCommand { get; }
+        public ObservableCollection<LookupItem> ProgrammingLanguages { get; }
 
         private async void OnSaveExecute()
         {
@@ -87,8 +112,8 @@ namespace FriendOrganizer.UI.ViewModel
 
         private async void OnDeleteExecute()
         {
-            var result = _messageDialogService.ShowOkCancelDialog($"Do you really want to delete {Friend.FirstName} and {Friend.LastName}?",
-                "Question");
+            var result = _messageDialogService.ShowOkCancelDialog($"Do you really want to delete" +
+                $" {Friend.FirstName} and {Friend.LastName}?", "Question from admin!");
             if (result == MessageDialogResult.OK)
             {
                 _friendRepository.Remove(Friend.Model);
