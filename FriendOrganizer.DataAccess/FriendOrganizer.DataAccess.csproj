@@ -60,6 +60,10 @@
     <Compile Include="Migrations\202004172004328_addProgrammingLanguagesTable.Designer.cs">
       <DependentUpon>202004172004328_addProgrammingLanguagesTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202005151222453_AddFriendNumber.cs" />
+    <Compile Include="Migrations\202005151222453_AddFriendNumber.Designer.cs">
+      <DependentUpon>202005151222453_AddFriendNumber.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -82,6 +86,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202004172004328_addProgrammingLanguagesTable.resx">
       <DependentUpon>202004172004328_addProgrammingLanguagesTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202005151222453_AddFriendNumber.resx">
+      <DependentUpon>202005151222453_AddFriendNumber.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
