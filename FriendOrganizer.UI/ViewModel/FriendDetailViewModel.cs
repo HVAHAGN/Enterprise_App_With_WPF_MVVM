@@ -24,7 +24,9 @@ namespace FriendOrganizer.UI.ViewModel
     private IMessageDialogService _messageDialogService;
     private IProgrammingLanguageLookupDataService _programmingLanguageLookupDataService;
 
-    public FriendDetailViewModel(IFriendRepository friendRepository, IEventAggregator eventAggregator, IMessageDialogService messageDialogService,
+    public FriendDetailViewModel(IFriendRepository friendRepository,
+      IEventAggregator eventAggregator,
+      IMessageDialogService messageDialogService,
       IProgrammingLanguageLookupDataService programmingLanguageLookupDataService)
       :base(eventAggregator)
     {

@@ -8,13 +8,14 @@ using System.Threading.Tasks;
 
 namespace FriendOrganizer.UI.Data.Repositories
 {
-    public class FriendRespository : GenericRepository<Friend,FriendOrganizerDbContext>, IFriendRepository
-    {
+  public class FriendRespository : GenericRepository<Friend,FriendOrganizerDbContext>,
+                                   IFriendRepository
+  {
     public FriendRespository(FriendOrganizerDbContext context)
-            :base(context)
+      :base(context)
     {
-      
     }
+
     public override async Task<Friend> GetByIdAsync(int friendId)
     {
       return await Context.Friends
@@ -22,11 +23,9 @@ namespace FriendOrganizer.UI.Data.Repositories
         .SingleAsync(f => f.Id == friendId);
     }
 
-   
     public void RemovePhoneNumber(FriendPhoneNumber model)
     {
       Context.FriendPhoneNumbers.Remove(model);
     }
-
   }
 }

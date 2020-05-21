@@ -46,7 +46,8 @@ namespace FriendOrganizer.UI.ViewModel
 
     protected virtual void RaiseDetailDeletedEvent(int modelId)
     {
-      EventAggregator.GetEvent<AfterDetailDeletedEvent>().Publish(new AfterDetailDeletedEventArgs
+      EventAggregator.GetEvent<AfterDetailDeletedEvent>().Publish(new
+       AfterDetailDeletedEventArgs
       {
         Id = modelId,
         ViewModelName = this.GetType().Name
