@@ -1,9 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Windows.Documents;
 using FriendOrganizer.Model;
 
 namespace FriendOrganizer.UI.Data.Repositories
 {
   public interface IMeetingRepository:IGenericRepository<Meeting>
   {
+        Task<List<Friend>> GetAllFriendsAsync();
   }
 }
