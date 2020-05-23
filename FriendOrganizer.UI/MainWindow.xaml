@@ -10,48 +10,58 @@
         Title="FriendOrganizer" Height="700" Width="1000"
         WindowStartupLocation="CenterScreen"
         FontSize="20">
-  <Window.Resources>
-    <DataTemplate DataType="{x:Type viewModel:FriendDetailViewModel}">
-      <view:FriendDetailView/>
-    </DataTemplate>
-    <DataTemplate DataType="{x:Type viewModel:MeetingDetailViewModel}">
-      <view:MeetingDetailView/>
-    </DataTemplate>
-  </Window.Resources>
-  <Grid>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition/>
-    </Grid.RowDefinitions>
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="200"/>
-      <ColumnDefinition />
-    </Grid.ColumnDefinitions>
-    <Menu Grid.ColumnSpan="2" FontSize="20">
-      <MenuItem Header="Create">
-        <MenuItem Header="New Friend" Command="{Binding CreateNewDetailCommand}"
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewModel:FriendDetailViewModel}">
+            <view:FriendDetailView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:MeetingDetailViewModel}">
+            <view:MeetingDetailView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:ProgrammingLanguageDetailViewModel}">
+            <view:ProgrammingLanguageDetailView/>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Menu Grid.ColumnSpan="2" FontSize="20">
+            <MenuItem Header="Create">
+                <MenuItem Header="New Friend" Command="{Binding CreateNewDetailCommand}"
                   CommandParameter="{x:Type viewModel:FriendDetailViewModel}"/>
-        <MenuItem Header="New Meeting" Command="{Binding CreateNewDetailCommand}"
+                <MenuItem Header="New Meeting" Command="{Binding CreateNewDetailCommand}"
                   CommandParameter="{x:Type viewModel:MeetingDetailViewModel}"/>
-      </MenuItem>
-    </Menu>
-    <view:NavigationView Grid.Row="1"
+            </MenuItem>
+            <MenuItem Header="Edit">
+                <MenuItem Header="ProgrammingLanguages" 
+                          Command="{Binding OpenSingleDetailViewCommand}"
+                  CommandParameter="{x:Type viewModel:ProgrammingLanguageDetailViewModel}">
+                </MenuItem>
+            </MenuItem>
+         
+        </Menu>
+        <view:NavigationView Grid.Row="1"
                          DataContext="{Binding NavigationViewModel}"/>
-    <TabControl Grid.Row="1" Grid.Column="1" 
+        <TabControl Grid.Row="1" Grid.Column="1" 
                 ItemsSource="{Binding DetailViewModels}"
                 SelectedItem="{Binding SelectedDetailViewModel,Mode=TwoWay}">
-      <TabControl.ItemTemplate>
-        <DataTemplate>
-          <StackPanel Orientation="Horizontal">
-            <TextBlock Text="{Binding Title}"/>
-            <TextBlock Text="*" Visibility="{Binding HasChanges,
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Title}"/>
+                        <TextBlock Text="*" Visibility="{Binding HasChanges,
               Converter={StaticResource booleanToVisibilityConverter}}"/>
-            <Button Command="{Binding CloseDetailViewCommand}" 
+                        <Button Command="{Binding CloseDetailViewCommand}" 
                     VerticalContentAlignment="Top" Margin="2"
                     Content="x" FontSize="20"/>
-          </StackPanel>
-        </DataTemplate>
-      </TabControl.ItemTemplate>
-    </TabControl>
-  </Grid>
+                    </StackPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+        </TabControl>
+    </Grid>
 </Window>
