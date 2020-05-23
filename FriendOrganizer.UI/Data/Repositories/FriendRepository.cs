@@ -8,48 +8,31 @@ using System.Threading.Tasks;
 
 namespace FriendOrganizer.UI.Data.Repositories
 {
-    public class FriendRepository : IFriendRepository
+  public class FriendRespository : GenericRepository<Friend,FriendOrganizerDbContext>,
+                                   IFriendRepository
+  {
+    public FriendRespository(FriendOrganizerDbContext context)
+      :base(context)
     {
-        private FriendOrganizerDbContext _context;
-
-        public FriendRepository(FriendOrganizerDbContext context)
-        {
-            _context = context;
-        }
-
-        public void Add(Friend friend)
-        {
-            _context.Friends.Add(friend);
-        }
-
-        public async Task<Friend> GetByIdAsync(int friendId)
-        {
-
-            return await _context.Friends
-                .Include(f=>f.PhoneNumbers)
-                .SingleAsync(f => f.Id == friendId);
-
-        }
-
-        public bool HasChanges()
-        {
-            return _context.ChangeTracker.HasChanges();
-        }
-
-        public void Remove(Friend model)
-        {
-            _context.Friends.Remove(model);
-        }
-
-        public void RemovePhoneNumber(FriendPhoneNumber model)
-        {
-            _context.FriendPhoneNumbers.Remove(model);
-        }
-
-        public async Task SaveAsync()
-        {
-            await _context.SaveChangesAsync();
-
-        }
     }
+
+    public override async Task<Friend> GetByIdAsync(int friendId)
+    {
+      return await Context.Friends
+        .Include(f => f.PhoneNumbers)
+        .SingleAsync(f => f.Id == friendId);
+    }
+
+    public async Task<bool> HasMeetingsAsync(int friendId)
+    {
+      return await Context.Meetings.AsNoTracking()
+        .Include(m => m.Friends)
+        .AnyAsync(m => m.Friends.Any(f => f.Id == friendId));
+    }
+
+    public void RemovePhoneNumber(FriendPhoneNumber model)
+    {
+      Context.FriendPhoneNumbers.Remove(model);
+    }
+  }
 }

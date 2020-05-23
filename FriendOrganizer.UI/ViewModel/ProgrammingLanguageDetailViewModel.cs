@@ -123,15 +123,15 @@ namespace FriendOrganizer.UI.ViewModel
 
     private async void OnRemoveExecute()
     {
-            //var isReferenced =
-            //  await _programmingLanguageRepository.IsReferencedByFriendAsync(
-            //    SelectedProgrammingLanguage.Id);
-            //if (isReferenced)
-            //{
-            //  MessageDialogService.ShowInfoDialog($"The language {SelectedProgrammingLanguage.Name}" +
-            //    $" can't be removed, as it is referenced by at least one friend");
-            //  return;
-            //}
+            var isReferenced =
+              await _programmingLanguageRepository.IsReferencedByFriendAsync(
+                SelectedProgrammingLanguage.Id);
+            if (isReferenced)
+            {
+                MessageDialogService.ShowInfoDialog($"The language {SelectedProgrammingLanguage.Name}" +
+                  $" can't be removed, as it is referenced by at least one friend");
+                return;
+            }
 
             SelectedProgrammingLanguage.PropertyChanged -= Wrapper_PropertyChanged;
             _programmingLanguageRepository.Remove(SelectedProgrammingLanguage.Model);

@@ -89,7 +89,7 @@
     <Compile Include="Data\Lookups\IMeetingLookupDataService.cs" />
     <Compile Include="Data\Lookups\IProgrammingLanguageLookupDataService.cs" />
     <Compile Include="Data\Lookups\LookupDataService.cs" />
-    <Compile Include="Data\Repositories\FriendRespository.cs" />
+    <Compile Include="Data\Repositories\FriendRepository.cs" />
     <Compile Include="Data\Repositories\GenericRepository.cs" />
     <Compile Include="Data\Repositories\IFriendRepository.cs" />
     <Compile Include="Data\Repositories\IGenericRepository.cs" />
