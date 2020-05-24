@@ -13,6 +13,7 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using System.Data.Entity.Infrastructure;
 
 namespace FriendOrganizer.UI.ViewModel
 {
@@ -42,7 +43,7 @@ namespace FriendOrganizer.UI.ViewModel
 
         private async void AfterCollectionSaved(AfterCollectionSavedEventArgs args)
         {
-            if (args.ViewModelName==nameof(ProgrammingLanguageDetailViewModel))
+            if (args.ViewModelName == nameof(ProgrammingLanguageDetailViewModel))
             {
                 await LoadProgrammingLanguagesLookupAsync();
             }
@@ -166,10 +167,13 @@ namespace FriendOrganizer.UI.ViewModel
 
         protected override async void OnSaveExecute()
         {
-            await _friendRepository.SaveAsync();
-            HasChanges = _friendRepository.HasChanges();
-            Id = Friend.Id;
-            RaiseDetailSavedEvent(Friend.Id, $"{Friend.FirstName} {Friend.LastName}");
+            await SaveWithOptimisticConcurrencyAsync(_friendRepository.SaveAsync, 
+                ()=> {
+                    HasChanges = _friendRepository.HasChanges();
+                    Id = Friend.Id;
+                    RaiseDetailSavedEvent(Friend.Id, $"{Friend.FirstName} {Friend.LastName}");
+
+                });
         }
 
         protected override bool OnSaveCanExecute()
